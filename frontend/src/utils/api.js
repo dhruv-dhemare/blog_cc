@@ -1,4 +1,4 @@
-const API_BASE_URL = '/api';
+const API_BASE_URL = 'http://Blog-backend-env.eba-e65c8bgk.ap-south-1.elasticbeanstalk.com/api';
 
 export const apiClient = {
   // Posts
