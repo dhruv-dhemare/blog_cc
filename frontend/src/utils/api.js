@@ -1,99 +1,102 @@
-const API_BASE_URL = '/api';
+export const createApiClient = (baseURL) => {
+  return {
+    // Posts
+    getAllPosts: async () => {
+      const response = await fetch(`${baseURL}/posts`);
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      const data = await response.json();
+      return Array.isArray(data) ? data : [];
+    },
 
-export const apiClient = {
-  // Posts
-  getAllPosts: async () => {
-    const response = await fetch(`${API_BASE_URL}/posts`);
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
-    }
-    const data = await response.json();
-    return Array.isArray(data) ? data : [];
-  },
+    getPostById: async (id) => {
+      const response = await fetch(`${baseURL}/posts/${id}`);
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      return response.json();
+    },
 
-  getPostById: async (id) => {
-    const response = await fetch(`${API_BASE_URL}/posts/${id}`);
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
-    }
-    return response.json();
-  },
+    createPost: async (post) => {
+      const response = await fetch(`${baseURL}/posts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(post)
+      });
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      return response.json();
+    },
 
-  createPost: async (post) => {
-    const response = await fetch(`${API_BASE_URL}/posts`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(post)
-    });
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
-    }
-    return response.json();
-  },
+    updatePost: async (id, post) => {
+      const response = await fetch(`${baseURL}/posts/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(post)
+      });
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      return response.json();
+    },
 
-  updatePost: async (id, post) => {
-    const response = await fetch(`${API_BASE_URL}/posts/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(post)
-    });
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
-    }
-    return response.json();
-  },
+    deletePost: async (id) => {
+      const response = await fetch(`${baseURL}/posts/${id}`, {
+        method: 'DELETE'
+      });
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      return response.json();
+    },
 
-  deletePost: async (id) => {
-    const response = await fetch(`${API_BASE_URL}/posts/${id}`, {
-      method: 'DELETE'
-    });
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
-    }
-    return response.json();
-  },
+    getFeaturedPosts: async () => {
+      const response = await fetch(`${baseURL}/posts/featured`);
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      const data = await response.json();
+      return Array.isArray(data) ? data : [];
+    },
 
-  getFeaturedPosts: async () => {
-    const response = await fetch(`${API_BASE_URL}/posts/featured`);
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
-    }
-    const data = await response.json();
-    return Array.isArray(data) ? data : [];
-  },
+    // Comments
+    getCommentsByPost: async (postId) => {
+      const response = await fetch(`${baseURL}/comments/post/${postId}`);
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      const data = await response.json();
+      return Array.isArray(data) ? data : [];
+    },
 
-  // Comments
-  getCommentsByPost: async (postId) => {
-    const response = await fetch(`${API_BASE_URL}/comments/post/${postId}`);
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
-    }
-    const data = await response.json();
-    return Array.isArray(data) ? data : [];
-  },
+    createComment: async (comment) => {
+      const response = await fetch(`${baseURL}/comments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(comment)
+      });
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      return response.json();
+    },
 
-  createComment: async (comment) => {
-    const response = await fetch(`${API_BASE_URL}/comments`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(comment)
-    });
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
+    deleteComment: async (id) => {
+      const response = await fetch(`${baseURL}/comments/${id}`, {
+        method: 'DELETE'
+      });
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      return response.json();
     }
-    return response.json();
-  },
-
-  deleteComment: async (id) => {
-    const response = await fetch(`${API_BASE_URL}/comments/${id}`, {
-      method: 'DELETE'
-    });
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
-    }
-    return response.json();
-  }
+  };
 };
+
+// Default export for backward compatibility
+export const apiClient = createApiClient('/api');
 
 export const formatDate = (date) => {
   if (!date) return 'Unknown Date';

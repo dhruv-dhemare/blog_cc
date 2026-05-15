@@ -1,10 +1,11 @@
 import '../styles/components.css';
-import { useState } from 'react';
-import { apiClient } from '../utils/api';
+import { useState, useContext } from 'react';
+import { ApiContext } from '../App';
 
 const CATEGORIES = ['Technology', 'Lifestyle', 'Business', 'Travel', 'Food', 'Other'];
 
 export function CreatePostForm({ onPostCreated, onCancel }) {
+  const { apiClient } = useContext(ApiContext);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -114,6 +115,7 @@ export function CreatePostForm({ onPostCreated, onCancel }) {
 }
 
 export function EditPostForm({ post, onPostUpdated, onCancel }) {
+  const { apiClient } = useContext(ApiContext);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
